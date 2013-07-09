@@ -12,11 +12,10 @@
   {% if cl.formset or action_form %}
     {% url 'admin:jsi18n' as jsi18nurl %}
     <script type="text/javascript" src="{{ jsi18nurl|default:'../../jsi18n/' }}"></script>
-	<script type="text/javascript" src="{% static "admin/js/jquery.min.js" %}"></script>
+	<script type="text/javascript" src="../../../media/jquery.min.js"></script>
 	<script type="text/javascript">
-		console.log("Before entering document.ready function");
 		$(document).ready(function(){
-		console.log("Entered document.ready function");
+		
 		{% for obj in cl.result_list %}
 		
 			//Done toggle
@@ -24,7 +23,6 @@
 				
 				if ($(this).html().indexOf("icon-on") != -1) { $action = "off"; }
 				else { $action = "on"; }
-				console.log("Just before ajax call");
 				$.ajax({
 					type: "POST",
 					url: "/onhold_done/done/" + $action + "/{{ obj.pk }}/",

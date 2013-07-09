@@ -31,13 +31,18 @@ def media(request, mode):
 	"""
 	Serve icon-on|off.gif media file and jquery.js
 	""" 
+	if mode == 'jquery':
+		print 'settings.MEDIA_ROOT\n'
+		print settings.MEDIA_ROOT
+		f = open((settings.MEDIA_ROOT+'\jquery.min.js').replace('\\','/'))
+		return HttpResponse(f.read())
 	f = None
 	val = ''
 	if mode == 'on':
 		val = 'on'
 	else:
 		val = 'off'
-	f= open((settings.MEDIA_ROOT+'\icon-'+val+'.gif').replace('\\','/'))
+	f = open((settings.MEDIA_ROOT+'\icon-'+val+'.gif').replace('\\','/'))
 	return HttpResponse(f.read(), mimetype="image/gif")
 
 '''
