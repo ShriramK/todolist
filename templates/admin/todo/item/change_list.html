@@ -29,7 +29,21 @@
 					type: "POST",
 					url: "/onhold_done/done/" + $action + "/{{ obj.pk }}/",
 					success: function(action) {
-						$('#done_{{ obj.pk }}').html("<img src=' 'media/icon-" + $action + ".gif' />");
+						$('#done_{{ obj.pk }}').html("<img src='../../../media/icon-" + $action + ".gif' />");
+					}
+				})
+			});
+
+			//Onhold toggle
+			$('#onhold_{{ obj.pk }}').click(function(){
+
+				if ($(this).html().indexOf("icon-on") != -1) { $action = "off";}
+				else { $action = "on";}
+				$.ajax({
+					type: "POST",
+					url: "/onhold_done/onhold/" + $action + "/{{ obj.pk }}/",
+					success: function(action) {
+						$('#onhold_{{ obj.pk }}').html("<img src='../../../media/icon-" + $action + ".gif' />");
 					}
 				})
 			});

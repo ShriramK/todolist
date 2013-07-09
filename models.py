@@ -38,22 +38,11 @@ class Item(models.Model):
 	delete_item.allow_tags = True
 
 	def onhold_(self):
-		#iconValue = ""
-		#<img src="{% static "admin/img/icon_searchbox.png" %}" alt="Search" />
 		if self.onhold:
-			#iconValue = "img/icon-on.gif"
-			#btn = "<img alt='True' src='%s' />"
-			btn = "<div id='onhold_%s'><img alt='True' src='%sicon-on.gif'/></div>"#admin/img/icon-on.gif
+			btn = "<div id='onhold_%s'><img alt='True' src='%sicon-on.gif'/></div>"
 		else:
-			#iconValue = "img/icon-off.gif"
-			#btn = "<img alt='True' src='%s' />"	
-			btn = "<div id='onhold_%s'><img alt='True' src='%sicon-off.gif'/></div>"#admin/img/icon-off.gif
-		#return btn % (self.pk, 
-		#import pdb
-		#pdb.set_trace()
-		#return btn % (static('admin/img/icon-%s.gif' %{True: 'on', False: 'off', None: 'unknown'}[self.onhold]))#settings.STATIC
-		#return btn % (static('admin/img/icon-%s.gif' %{True: 'on', False: 'off', None: 'unknown'}[self.onhold]))#settings.STATIC
-		return btn % (self.pk, settings.MEDIA_URL)#, settings.MEDIA_URL)
+			btn = "<div id='onhold_%s'><img alt='True' src='%sicon-off.gif'/></div>"
+		return btn % (self.pk, settings.MEDIA_URL)
 	onhold_.allow_tags = True
 	onhold_.admin_order_field = "onhold"
 

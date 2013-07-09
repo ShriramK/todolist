@@ -16,9 +16,6 @@ def onhold_done(request, mode, action, pk):
 	"""Toggle Done / Onhold on/off."""
 	item = Item.objects.get(pk=pk)
 
-	print 'request '
-	print request
-
 	if action == "on":
 		if mode == "done": item.done = True
 		elif mode == "onhold": item.onhold = True
@@ -36,7 +33,6 @@ def media(request, mode):
 	""" 
 	f = None
 	val = ''
-	#if 'icon-on.gif' in request.path:
 	if mode == 'on':
 		val = 'on'
 	else:
