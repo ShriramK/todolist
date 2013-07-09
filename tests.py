@@ -54,3 +54,4 @@ class SimpleTest(TestCase):
 			"<a href='%s'>Delete</a>" % \
 			reverse("todo.views.delete_item", \
 			args=[each.pk]))
+

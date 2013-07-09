@@ -1,9 +1,12 @@
+from django.conf import settings
 from django.contrib import admin
+#from django.contrib.admin.templatetags.admin_static import static
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.utils.html import escape
 
 # Create your models here.
@@ -21,33 +24,55 @@ class Item(models.Model):
 	priority = models.IntegerField(default=0)
 	difficulty = models.IntegerField(default=0)
 	done = models.BooleanField(default=False)
-	onhold = models.BooleanField(default=True)
-	
-	def mark_done(self):
-		return "<a href='%s'>Done</a>" % \
-		reverse("todo.views.mark_done", args=[self.pk])
-	mark_done.allow_tags = True
+	onhold = models.BooleanField(default=False)
 	
 	def progress_(self):
 		return "<div style='width: 100px; border: 1px solid #ccc;'>" + \
 		"<div style='height: 4px; width: %dpx; background: #555; '></div></div>" % self.progress
 	progress_.allow_tags = True
 
-	def toggle_onhold(self):
-		return "<a href='%s'>OnHold</a>" % \
-		reverse("todo.views.toggle_onhold", \
-		args=[self.pk])
-	toggle_onhold.allow_tags = True
-	
 	def delete_item(self):
 		return "<a href='%s'>Delete</a>" % \
 		reverse("todo.views.delete_item", \
 		args=[self.pk])
 	delete_item.allow_tags = True
 
+	def onhold_(self):
+		#iconValue = ""
+		#<img src="{% static "admin/img/icon_searchbox.png" %}" alt="Search" />
+		if self.onhold:
+			#iconValue = "img/icon-on.gif"
+			#btn = "<img alt='True' src='%s' />"
+			btn = "<div id='onhold_%s'><img alt='True' src='%sicon-on.gif'/></div>"#admin/img/icon-on.gif
+		else:
+			#iconValue = "img/icon-off.gif"
+			#btn = "<img alt='True' src='%s' />"	
+			btn = "<div id='onhold_%s'><img alt='True' src='%sicon-off.gif'/></div>"#admin/img/icon-off.gif
+		#return btn % (self.pk, 
+		#import pdb
+		#pdb.set_trace()
+		#return btn % (static('admin/img/icon-%s.gif' %{True: 'on', False: 'off', None: 'unknown'}[self.onhold]))#settings.STATIC
+		#return btn % (static('admin/img/icon-%s.gif' %{True: 'on', False: 'off', None: 'unknown'}[self.onhold]))#settings.STATIC
+		return btn % (self.pk, settings.MEDIA_URL)#, settings.MEDIA_URL)
+	onhold_.allow_tags = True
+	onhold_.admin_order_field = "onhold"
+
+	def done_(self):
+		if self.done:
+			btn = "<div id='done_%s'><img alt='True' \
+			src='%sicon-on.gif' /></div>"
+		else:
+			btn = "<div id='done_%s'><img alt='True' \
+			src='%sicon-off.gif' /></div>"
+		return btn % (self.pk, settings.MEDIA_URL)
+	done_.allow_tags = True
+	done_.admin_order_field = "done"
+
 class ItemAdmin(admin.ModelAdmin):
-	list_display = ["name", "priority", "difficulty", "user", "created", "progress_", "mark_done",  "done", "toggle_onhold", "onhold", "delete_item"]
+	list_display = ["name", "priority", "difficulty", "user", "created", "progress_", "done_", "onhold_", "delete_item", "done", "onhold"]
+	list_filter = ["priority", "difficulty", "onhold", "done", "user"]
 	search_fields = ["name"]
+
 
 class ItemInline(admin.TabularInline):
 	model = Item
@@ -84,6 +109,7 @@ class DateAdmin(admin.ModelAdmin):
 					item.user = request.user
 					item.save()
 			return HttpResponseRedirect(reverse("admin:todo_item_changelist"))
+			#return render(request, "todo/item/change_list.html")
 
 admin.site.register(Item, ItemAdmin)
 admin.site.register(DateTime, DateAdmin)
