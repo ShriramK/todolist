@@ -10,7 +10,7 @@ from todo.models import *
 def delete_item(request, pk):
 	Item.objects.filter(pk=pk).delete()
 	return HttpResponseRedirect(reverse("admin:todo_item_changelist"))
-	
+
 @staff_member_required
 def onhold_done(request, mode, action, pk):
 	"""Toggle Done / Onhold on/off."""
@@ -45,8 +45,13 @@ def media(request, mode):
 	f = open((settings.MEDIA_ROOT+'\icon-'+val+'.gif').replace('\\','/'))
 	return HttpResponse(f.read(), mimetype="image/gif")
 
-'''
-@staff_member_required
-def changelist(request):
-	return render(request, 'todo/item/change_list.html')
-'''
+def progress(request, pk):
+	"""Set task progress."""
+	p = request.POST
+	if "progress" in p:
+		item = Item.objects.get(pk=pk)
+		item.progress = int(p["progress"])
+		item.save()
+	return HttpResponse('')
+	#return HttpResponseRedirect(reverse("admin:todo_item_changelist"))
+

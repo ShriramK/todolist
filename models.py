@@ -27,8 +27,27 @@ class Item(models.Model):
 	onhold = models.BooleanField(default=False)
 	
 	def progress_(self):
-		return "<div style='width: 100px; border: 1px solid #ccc;'>" + \
-		"<div style='height: 4px; width: %dpx; background: #555; '></div></div>" % self.progress
+		return """
+			<div id="progress_cont_%s" class="progress_cont">
+				<div id="progress_btns_%s" class="progress_btns">
+					<ul>
+						<li>10</li>
+						<li>20</li>
+						<li>30</li>
+						<li>40</li>
+						<li>50</li>
+						<li>60</li>
+						<li>70</li>
+						<li>80</li>
+						<li>90</li>
+						<li>100</li>
+					</ul>
+				</div>
+				<div id="progress_on_%s" class="progress_on">&nbsp;</div>
+				<div id="progress_%s" style="visibility: hidden"></div>
+			</div>
+			""" % (self.pk, self.pk, self.pk, self.pk)
+
 	progress_.allow_tags = True
 
 	def delete_item(self):
@@ -58,8 +77,8 @@ class Item(models.Model):
 	done_.admin_order_field = "done"
 
 class ItemAdmin(admin.ModelAdmin):
-	list_display = ["name", "priority", "difficulty", "user", "created", "progress_", "done_", "onhold_", "delete_item", "done", "onhold"]
-	list_filter = ["priority", "difficulty", "onhold", "done", "user"]
+	list_display = ["name", "priority", "difficulty", "user", "created", "progress_", "done_", "onhold_", "delete_item"]
+	list_filter = ["priority", "difficulty", "user"]
 	search_fields = ["name"]
 
 
